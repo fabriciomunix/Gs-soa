@@ -6,15 +6,16 @@
 
 | Campo | Preenchimento |
 |---|---|
-| **Nome** | Alerta Córrego |
-| **Cidade e bairro** | São Paulo — região do Córrego Ponte Baixa / M'Boi Mirim (Zona Sul) |
-| **Cidadão beneficiado** | Morador de área de risco de alagamento, com prioridade para idosos e pessoas com mobilidade reduzida |
-| **Problema, em uma frase** | Moradores de ruas às margens de córregos pequenos, que não são monitorados pelas estações da Prefeitura, recebem alertas de chuva para a região inteira, mas não sabem quando o córrego da rua deles vai transbordar, e quem tem mobilidade reduzida depende de vizinhos para sair a tempo. |
-| **Como funciona** | Um sensor no córrego (ESP32) mede o nível da água e a chuva → envia para uma API → a API classifica o risco e gera alertas → o app e o painel web mostram os alertas para os moradores cadastrados, com prioridade para quem precisa de ajuda para sair. |
-| **O que cada parte faz** | **Mobile:** app do morador (ver nível/risco do córrego, receber alertas, cadastrar-se e pedir ajuda). **SOA:** API REST (Python/FastAPI) com domínio, banco, migrações, Swagger e testes. **C#:** Web API .NET com EF Core, LINQ, async e testes unitários. **QA:** features e casos de teste no Azure Boards. |
+| **Nome da CitizenTech** | Alerta Córrego |
+| **Cidade e bairro** | São Paulo — M'Boi Mirim (Zona Sul) |
+| **Cidadão beneficiado** | Morador de rua às margens de córrego com risco de alagamento, com prioridade para idosos e pessoas com mobilidade reduzida |
+| **Problema, em uma frase** | Moradores de ruas às margens de córregos pequenos recebem o alerta de chuva da Defesa Civil para a região inteira, mas não sabem quando o córrego da rua deles vai transbordar, e quem tem mobilidade reduzida depende de vizinhos para sair a tempo. |
+| **Como funciona** | Um ESP32 no córrego mede o nível da água e a chuva e publica via MQTT. Um servidor Linux recebe as leituras, classifica o risco (Normal / Atenção / Evacuar) e mostra um painel web com a rede de apoio aos moradores prioritários. Um modelo de ML antecipa temporais, e os dados sensíveis dos moradores são auditados e protegidos. |
+| **Diferencial** | Complementa a Defesa Civil: o alerta oficial avisa que vai chover na região; o Alerta Córrego avisa que a água está subindo naquela rua e quem precisa de ajuda primeiro. |
+| **O que cada parte faz** | **Physical Computing:** estação ESP32 no Wokwi (nível do córrego, chuva, LEDs, sirene, LCD, MQTT) · **Operating Systems:** servidor Linux provisionado por Shell Script, monitorado e tolerante a falhas, que hospeda o painel · **IA & ML:** XGBoost que prevê chuva forte nas próximas 3 h para antecipar o alerta · **Cybersecurity:** CitizenGuard, que detecta dados pessoais e sensíveis, rastreia vazamentos (taint analysis), traduz falhas em alertas por IA e mede o Risco Cidadão |
 | **Link do repositório** | **SOA (este repositório): https://github.com/fabriciomunix/Gs-soa** · Mobile: https://github.com/fabriciomunix/GS-Mobile · C#: https://github.com/fabriciomunix/Gs-c- · QA: https://github.com/fabriciomunix/GS-QA |
-| **Indicador de impacto** | Minutos de antecedência do alerta antes da água atingir a rua; nº de moradores prioritários alertados |
-| **ODS conectados** | ODS 11 (meta 11.5 — reduzir mortes/afetados por desastres), ODS 13 (meta 13.1 — adaptação a eventos climáticos), ODS 10 (inclusão de idosos e PcD) |
+| **Indicador de impacto** | Minutos de antecedência entre o alerta e o transbordamento; nº de moradores prioritários alertados; Risco Cidadão dos dados cadastrados |
+| **ODS conectados** | ODS 11 (cidades resilientes, meta 11.5) · ODS 13 (adaptação ao clima, meta 13.1) · ODS 10 (inclusão de idosos e PcD) |
 
 ### Integrantes
 - Fabricio Carlos Duarte Rossi Junior — RM 555017
